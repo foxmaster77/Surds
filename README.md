@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MVP SaaS Dashboard
 
 A minimum viable product SaaS dashboard with real-time data visualization.
@@ -195,3 +196,6 @@ The dashboard is optimized to handle **20,000+ links** efficiently:
 - Backend simulates live data updates
 - Frontend auto-refreshes every 5 seconds (throttled)
 - Optimized for handling 20,000+ links efficiently
+=======
+# Surds
+>>>>>>> a0dccbb62bda413f2ffa1716f301eda0653f3dac
