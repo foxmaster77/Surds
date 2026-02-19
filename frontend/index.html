@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surds Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="app-background">
+        <div class="app-shell">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="logo-circle">S</div>
+                    <div class="logo-text">Surds</div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <button class="nav-item nav-item-active" data-view="dashboard">
+                        <span class="nav-dot"></span>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="nav-item" data-view="manage-links">
+                        <span class="nav-icon"></span>
+                        <span>Manage links</span>
+                    </button>
+                    <button class="nav-item" data-view="realtime">
+                        <span class="nav-icon"></span>
+                        <span>Real time</span>
+                    </button>
+                    <button class="nav-item" data-view="reports">
+                        <span class="nav-icon"></span>
+                        <span>Reports</span>
+                    </button>
+                    <button class="nav-item" data-view="activity">
+                        <span class="nav-icon"></span>
+                        <span>Activity</span>
+                    </button>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <div class="user-pill">
+                        <div class="user-avatar">S</div>
+                        <div class="user-meta">
+                            <span class="user-name">Surds Admin</span>
+                            <span class="user-status">Active</span>
+                        </div>
+                    </div>
+                    <div class="theme-toggle">
+                        <button class="theme-btn theme-btn-active">Light</button>
+                        <button class="theme-btn">Dark</button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main layout -->
+            <div class="main-layout">
+                <!-- Top header -->
+                <header class="dashboard-header">
+                    <div class="header-title-block">
+                        <h1 id="headerTitle">Dashboard</h1>
+                        <p class="header-subtitle" id="headerSubtitle">Welcome back to your Surds analytics overview.</p>
+                    </div>
+                    <div class="status-indicator" id="statusIndicator">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Loading...</span>
+                    </div>
+                </header>
+
+                <!-- Main content columns -->
+                <main class="dashboard-main">
+                    <!-- Dashboard View -->
+                    <div id="view-dashboard" class="view-container view-active">
+                        <!-- Left / center column -->
+                        <section class="center-column">
+                            <!-- Welcome banner -->
+                            <section class="welcome-card">
+                                <div>
+                                    <p class="welcome-eyebrow">Welcome back</p>
+                                    <h2 class="welcome-title">Surds dashboard</h2>
+                                    <p class="welcome-copy">
+                                        Your link performance is updating live. Use the charts below to understand engagement.
+                                    </p>
+                                </div>
+                                <div class="welcome-actions">
+                                    <button class="primary-btn" onclick="switchView('reports')">View full report</button>
+                                    <button class="ghost-btn" onclick="switchView('manage-links')">Create new link</button>
+                                </div>
+                            </section>
+
+                            <!-- Summary cards -->
+                            <section class="summary-grid">
+                                <article class="summary-card">
+                                    <span class="summary-label">Total links</span>
+                                    <span class="summary-value" id="summaryTotalLinks">–</span>
+                                </article>
+                                <article class="summary-card">
+                                    <span class="summary-label">Total clicks</span>
+                                    <span class="summary-value" id="summaryTotalClicks">–</span>
+                                </article>
+                                <article class="summary-card">
+                                    <span class="summary-label">Top link clicks</span>
+                                    <span class="summary-value" id="summaryTopClicks">–</span>
+                                </article>
+                                <article class="summary-card">
+                                    <span class="summary-label">Last updated</span>
+                                    <span class="summary-value" id="summaryLastUpdated">–</span>
+                                </article>
+                            </section>
+
+                            <!-- Charts row -->
+                            <section class="charts-row">
+                                <div class="chart-card">
+                                    <div class="chart-header">
+                                        <h2>Clicks over time</h2>
+                                        <span class="chart-caption">Live line chart</span>
+                                    </div>
+                                    <canvas id="lineChart"></canvas>
+                                </div>
+                                <div class="chart-card">
+                                    <div class="chart-header">
+                                        <h2>Clicks by link</h2>
+                                        <span class="chart-caption">Live bar chart</span>
+                                    </div>
+                                    <canvas id="barChart"></canvas>
+                                </div>
+                            </section>
+                        </section>
+
+                        <!-- Right column: links / activity -->
+                        <section class="right-column">
+                            <h2 class="activity-title">Latest links</h2>
+                            <section class="links-section">
+                                <div id="loadingState" class="loading-state">
+                                    <div class="spinner"></div>
+                                    <p>Loading links...</p>
+                                </div>
+                                <div id="errorState" class="error-state" style="display: none;">
+                                    <p>Error loading data. Please check if the backend server is running.</p>
+                                    <button onclick="fetchLinks()">Retry</button>
+                                </div>
+                                <div id="linksList" class="links-list"></div>
+                            </section>
+                        </section>
+                    </div>
+
+                    <!-- Manage Links View -->
+                    <div id="view-manage-links" class="view-container">
+                        <section class="manage-links-view">
+                            <div class="view-header">
+                                <h1>Manage Links</h1>
+                                <button class="primary-btn" onclick="showAddLinkForm()">+ Add New Link</button>
+                            </div>
+                            <div id="manageLinksContent" class="manage-links-content">
+                                <div class="loading-state">
+                                    <div class="spinner"></div>
+                                    <p>Loading links...</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Real Time Reports View -->
+                    <div id="view-realtime" class="view-container">
+                        <section class="realtime-view">
+                            <div class="view-header">
+                                <h1>Real Time Reports</h1>
+                                <div class="status-indicator" id="realtimeStatusIndicator">
+                                    <span class="status-dot connected"></span>
+                                    <span class="status-text">Live</span>
+                                </div>
+                            </div>
+                            <div class="realtime-charts-grid">
+                                <div class="chart-card-large">
+                                    <div class="chart-header">
+                                        <h2>Real-time Clicks Over Time</h2>
+                                        <span class="chart-caption">Updates every 5 seconds</span>
+                                    </div>
+                                    <canvas id="realtimeLineChart"></canvas>
+                                </div>
+                                <div class="chart-card-large">
+                                    <div class="chart-header">
+                                        <h2>Real-time Clicks Distribution</h2>
+                                        <span class="chart-caption">Live bar chart</span>
+                                    </div>
+                                    <canvas id="realtimeBarChart"></canvas>
+                                </div>
+                                <div class="realtime-stats">
+                                    <div class="stat-card">
+                                        <span class="stat-label">Current Total Clicks</span>
+                                        <span class="stat-value" id="realtimeTotalClicks">0</span>
+                                    </div>
+                                    <div class="stat-card">
+                                        <span class="stat-label">Active Links</span>
+                                        <span class="stat-value" id="realtimeActiveLinks">0</span>
+                                    </div>
+                                    <div class="stat-card">
+                                        <span class="stat-label">Last Update</span>
+                                        <span class="stat-value" id="realtimeLastUpdate">--:--:--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Reports View -->
+                    <div id="view-reports" class="view-container">
+                        <section class="reports-view">
+                            <div class="view-header">
+                                <h1>Reports</h1>
+                                <button class="ghost-btn">Export Report</button>
+                            </div>
+                            <div class="reports-content">
+                                <div class="chart-card-large">
+                                    <div class="chart-header">
+                                        <h2>Performance Overview</h2>
+                                        <span class="chart-caption">All-time statistics</span>
+                                    </div>
+                                    <canvas id="reportsLineChart"></canvas>
+                                </div>
+                                <div class="chart-card-large">
+                                    <div class="chart-header">
+                                        <h2>Top Performing Links</h2>
+                                        <span class="chart-caption">By total clicks</span>
+                                    </div>
+                                    <canvas id="reportsBarChart"></canvas>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Activity View -->
+                    <div id="view-activity" class="view-container">
+                        <section class="activity-view">
+                            <div class="view-header">
+                                <h1>Activity Feed</h1>
+                                <button class="ghost-btn" onclick="refreshActivity()">Refresh</button>
+                            </div>
+                            <div id="activityFeed" class="activity-feed">
+                                <div class="loading-state">
+                                    <div class="spinner"></div>
+                                    <p>Loading activity...</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

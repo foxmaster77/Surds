@@ -1,0 +1,164 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: saas-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-password}
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - saas-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api-gateway:
+    build: ./services/api-gateway
+    container_name: saas-api-gateway
+    ports:
+      - "${API_GATEWAY_PORT:-3000}:3000"
+    environment:
+      PORT: 3000
+      NODE_ENV: ${NODE_ENV:-development}
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      - auth-service
+      - link-service
+      - analytics-service
+      - billing-service
+      - admin-service
+      - audit-service
+    networks:
+      - saas-network
+    restart: unless-stopped
+
+  auth-service:
+    build: ./services/auth-service
+    container_name: saas-auth-service
+    ports:
+      - "${AUTH_SERVICE_PORT:-3001}:3001"
+    environment:
+      PORT: 3001
+      NODE_ENV: ${NODE_ENV:-development}
+      MONGO_URI: mongodb://admin:password@mongodb:27017/saas-auth?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - saas-network
+    restart: unless-stopped
+
+  link-service:
+    build: ./services/link-service
+    container_name: saas-link-service
+    ports:
+      - "${LINK_SERVICE_PORT:-3002}:3002"
+    environment:
+      PORT: 3002
+      NODE_ENV: ${NODE_ENV:-development}
+      MONGO_URI: mongodb://admin:password@mongodb:27017/saas-links?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      SHORT_URL_BASE: http://localhost/l
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - saas-network
+    restart: unless-stopped
+
+  analytics-service:
+    build: ./services/analytics-service
+    container_name: saas-analytics-service
+    ports:
+      - "${ANALYTICS_SERVICE_PORT:-3003}:3003"
+    environment:
+      PORT: 3003
+      NODE_ENV: ${NODE_ENV:-development}
+      MONGO_URI: mongodb://admin:password@mongodb:27017/saas-analytics?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - saas-network
+    restart: unless-stopped
+
+  billing-service:
+    build: ./services/billing-service
+    container_name: saas-billing-service
+    ports:
+      - "${BILLING_SERVICE_PORT:-3004}:3004"
+    environment:
+      PORT: 3004
+      NODE_ENV: ${NODE_ENV:-development}
+      MONGO_URI: mongodb://admin:password@mongodb:27017/saas-billing?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - saas-network
+    restart: unless-stopped
+
+  admin-service:
+    build: ./services/admin-service
+    container_name: saas-admin-service
+    ports:
+      - "${ADMIN_SERVICE_PORT:-3005}:3005"
+    environment:
+      PORT: 3005
+      NODE_ENV: ${NODE_ENV:-development}
+      MONGO_URI: mongodb://admin:password@mongodb:27017/saas-admin?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - saas-network
+    restart: unless-stopped
+
+  audit-service:
+    build: ./services/audit-service
+    container_name: saas-audit-service
+    ports:
+      - "${AUDIT_SERVICE_PORT:-3006}:3006"
+    environment:
+      PORT: 3006
+      NODE_ENV: ${NODE_ENV:-development}
+      MONGO_URI: mongodb://admin:password@mongodb:27017/saas-audit?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - saas-network
+    restart: unless-stopped
+
+networks:
+  saas-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:

@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply transition-colors duration-200;
+}
+
+html {
+  @apply scroll-smooth;
+}
+
+body {
+  @apply bg-dark-950 text-dark-100;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-dark-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-700 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-dark-600;
+}
+
+/* Button Styles */
+.btn {
+  @apply px-4 py-2 rounded-lg font-medium transition-all duration-200;
+}
+
+.btn-primary {
+  @apply btn bg-primary text-white hover:bg-opacity-90 shadow-lg hover:shadow-glow;
+}
+
+.btn-secondary {
+  @apply btn bg-dark-700 text-white hover:bg-dark-600 border border-dark-600;
+}
+
+.btn-danger {
+  @apply btn bg-danger text-white hover:bg-opacity-90;
+}
+
+/* Card Styles */
+.card {
+  @apply bg-dark-900 rounded-lg border border-dark-800 shadow-lg;
+}
+
+.card-hover {
+  @apply card hover:border-primary hover:shadow-glow transition-all duration-300;
+}
+
+/* Input Styles */
+.input-field {
+  @apply w-full px-4 py-2 rounded-lg bg-dark-800 border border-dark-700 text-dark-100 placeholder-dark-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary focus:ring-opacity-50;
+}
+
+/* Badge Styles */
+.badge {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.badge-free {
+  @apply badge bg-dark-700 text-dark-300;
+}
+
+.badge-pro {
+  @apply badge bg-primary bg-opacity-20 text-primary;
+}
+
+.badge-enterprise {
+  @apply badge bg-secondary bg-opacity-20 text-secondary;
+}
+
+/* Animation Classes */
+.animate-fadeIn {
+  @apply animate-fadeIn;
+}
+
+.animate-slideIn {
+  @apply animate-slideIn;
+}
+
+.pulse-primary {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  @apply text-primary;
+}

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+    <!-- Auth Check Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-container">
+            <div class="auth-form">
+                <h1>Dashboard</h1>
+                <div id="authTabs" class="auth-tabs">
+                    <button class="auth-tab active" data-tab="login">Login</button>
+                    <button class="auth-tab" data-tab="register">Register</button>
+                </div>
+                
+                <!-- Login Form -->
+                <div id="loginForm" class="auth-content active">
+                    <div class="form-group">
+                        <input type="email" id="loginEmail" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="loginPassword" placeholder="Password" required>
+                    </div>
+                    <button id="loginBtn" class="auth-btn">Login</button>
+                    <p class="auth-tip">Demo: alex@example.com / password123</p>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="auth-content">
+                    <div class="form-group">
+                        <input type="text" id="registerName" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="registerEmail" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="registerPassword" placeholder="Password" required>
+                    </div>
+                    <button id="registerBtn" class="auth-btn">Register</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboardContainer" class="dashboard" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">📊</div>
+                    <span>Dashboard</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <span class="nav-icon">📈</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">👥</span>
+                    <span>Teams</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">💬</span>
+                    <span>Real Talk</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">📅</span>
+                    <span>Meetings</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">📚</span>
+                    <span>Lessons</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">📊</span>
+                    <span>Reporting</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="nav-icon">⚡</span>
+                    <span>Activity</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <img id="userAvatar" src="https://i.pravatar.cc/150?img=5" alt="User" class="user-avatar">
+                    <div class="user-info">
+                        <div id="userName" class="user-name">Loading...</div>
+                        <div class="user-role">Admin</div>
+                    </div>
+                    <button id="logoutBtn" class="logout-btn" title="Logout">🚪</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <div class="breadcrumb">Dashboard</div>
+                </div>
+                <div class="header-right">
+                    <div class="header-info">
+                        <span id="connectionStatus" class="connection-status">●</span>
+                        <span id="userOnline">0 users online</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Welcome Banner -->
+            <section class="welcome-banner">
+                <div class="welcome-content">
+                    <div>
+                        <h1>Welcome, <span id="welcomeName">User</span>! 👋</h1>
+                        <p id="welcomeTime">Good morning! Here's your dashboard overview.</p>
+                    </div>
+                    <div class="welcome-actions">
+                        <button class="btn btn-primary">📅 Schedule Meeting</button>
+                        <button class="btn btn-secondary">➕ New Task</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Cards -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">👥</span>
+                            <span class="stat-label">Teams</span>
+                        </div>
+                        <div class="stat-value" id="statTeams">0</div>
+                        <div class="stat-change">Active teams in organization</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">👤</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                        <div class="stat-value" id="statUsers">0</div>
+                        <div class="stat-change">Total members</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">💬</span>
+                            <span class="stat-label">Real Talks</span>
+                        </div>
+                        <div class="stat-value" id="statTalks">0</div>
+                        <div class="stat-change">Upcoming talks</div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-icon">📅</span>
+                            <span class="stat-label">Meetings</span>
+                        </div>
+                        <div class="stat-value" id="statMeetings">0</div>
+                        <div class="stat-change">Scheduled meetings</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Charts and Activity -->
+            <section class="dashboard-grid">
+                <!-- Chart Section -->
+                <div class="chart-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Team Distribution</h3>
+                            <span class="card-badge">Live</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="teamChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activity Section -->
+                <div class="activity-section">
+                    <!-- Upcoming Talks -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>💬 Upcoming Talks</h3>
+                        </div>
+                        <div class="activity-list" id="talksList">
+                            <div class="activity-item loading">
+                                <div class="skeleton"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Meetings -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📅 Upcoming Meetings</h3>
+                        </div>
+                        <div class="activity-list" id="meetingsList">
+                            <div class="activity-item loading">
+                                <div class="skeleton"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shoutouts -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>⚡ Shoutouts</h3>
+                        </div>
+                        <div class="activity-list" id="shoutoutsList">
+                            <div class="activity-item loading">
+                                <div class="skeleton"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Live Data Info -->
+            <section class="footer-info">
+                <p>Last updated: <span id="lastUpdate">Never</span> | Polling every 5 seconds | Real-time updates via Socket.io</p>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

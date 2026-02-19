@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="card" id="linksContainer">
+</div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2 class="logo">Kangaroo Inc.</h2>
+    <ul>
+      <li class="active">Home</li>
+      <li>Analytics</li>
+      <li>Customers</li>
+      <li>Partners</li>
+      <li>Payouts</li>
+      <li>Settings</li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+ <main class="main">
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <h1>Links</h1>
+    <input type="text" placeholder="Search links">
+  </div>
+
+  <!-- Links Card -->
+  <div class="card">
+
+    <div class="link-item">
+      <div class="link-info">
+        <h3>Linkd.sh/hKWhPa</h3>
+        <p>mywebsite.com • 7m ago</p>
+      </div>
+      <div class="click-badge">27 clicks</div>
+    </div>
+
+    <div class="link-item">
+      <div class="link-info">
+        <h3>Linkd.sh/iSnIPc</h3>
+        <p>mywebsite.com/blogposts • 10d ago</p>
+      </div>
+      <div class="click-badge">48 clicks</div>
+    </div>
+
+    <div class="link-item">
+      <div class="link-info">
+        <h3>Linkd.sh/jSnIPc</h3>
+        <p>mywebsite.com/blogposts • 10d ago</p>
+      </div>
+      <div class="click-badge">48 clicks</div>
+    </div>
+
+  </div>
+  <!-- Charts Section -->
+<div class="charts">
+
+  <div class="chart-card">
+    <h2>Total Clicks: 352</h2>
+    <canvas id="lineChart"></canvas>
+  </div>
+
+  <div class="chart-card">
+    <h2>Top Links</h2>
+    <canvas id="barChart"></canvas>
+  </div>
+
+</div>
+
+</main>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
