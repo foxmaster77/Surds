@@ -10,7 +10,7 @@
 </head>
 <body>
     <div class="app-background">
-        <div class="app-shell">
+        <div class="app-shell dashboard">
             <!-- Sidebar -->
             <aside class="sidebar">
                 <div class="sidebar-header">
@@ -77,7 +77,7 @@
                         <!-- Left / center column -->
                         <section class="center-column">
                             <!-- Welcome banner -->
-                            <section class="welcome-card">
+                            <section class="welcome-card card">
                                 <div>
                                     <p class="welcome-eyebrow">Welcome back</p>
                                     <h2 class="welcome-title">Surds dashboard</h2>
@@ -93,19 +93,19 @@
 
                             <!-- Summary cards -->
                             <section class="summary-grid">
-                                <article class="summary-card">
+                                <article class="summary-card card">
                                     <span class="summary-label">Total links</span>
                                     <span class="summary-value" id="summaryTotalLinks">–</span>
                                 </article>
-                                <article class="summary-card">
+                                <article class="summary-card card">
                                     <span class="summary-label">Total clicks</span>
                                     <span class="summary-value" id="summaryTotalClicks">–</span>
                                 </article>
-                                <article class="summary-card">
+                                <article class="summary-card card">
                                     <span class="summary-label">Top link clicks</span>
                                     <span class="summary-value" id="summaryTopClicks">–</span>
                                 </article>
-                                <article class="summary-card">
+                                <article class="summary-card card">
                                     <span class="summary-label">Last updated</span>
                                     <span class="summary-value" id="summaryLastUpdated">–</span>
                                 </article>
@@ -113,14 +113,14 @@
 
                             <!-- Charts row -->
                             <section class="charts-row">
-                                <div class="chart-card">
+                                <div class="chart-card card">
                                     <div class="chart-header">
                                         <h2>Clicks over time</h2>
                                         <span class="chart-caption">Live line chart</span>
                                     </div>
                                     <canvas id="lineChart"></canvas>
                                 </div>
-                                <div class="chart-card">
+                                <div class="chart-card card">
                                     <div class="chart-header">
                                         <h2>Clicks by link</h2>
                                         <span class="chart-caption">Live bar chart</span>
@@ -131,7 +131,7 @@
                         </section>
 
                         <!-- Right column: links / activity -->
-                        <section class="right-column">
+                        <section class="right-column card">
                             <h2 class="activity-title">Latest links</h2>
                             <section class="links-section">
                                 <div id="loadingState" class="loading-state">
@@ -154,7 +154,7 @@
                                 <h1>Manage Links</h1>
                                 <button class="primary-btn" onclick="showAddLinkForm()">+ Add New Link</button>
                             </div>
-                            <div id="manageLinksContent" class="manage-links-content">
+                            <div id="manageLinksContent" class="manage-links-content card">
                                 <div class="loading-state">
                                     <div class="spinner"></div>
                                     <p>Loading links...</p>
@@ -174,14 +174,14 @@
                                 </div>
                             </div>
                             <div class="realtime-charts-grid">
-                                <div class="chart-card-large">
+                                <div class="chart-card-large card">
                                     <div class="chart-header">
                                         <h2>Real-time Clicks Over Time</h2>
                                         <span class="chart-caption">Updates every 5 seconds</span>
                                     </div>
                                     <canvas id="realtimeLineChart"></canvas>
                                 </div>
-                                <div class="chart-card-large">
+                                <div class="chart-card-large card">
                                     <div class="chart-header">
                                         <h2>Real-time Clicks Distribution</h2>
                                         <span class="chart-caption">Live bar chart</span>
@@ -239,7 +239,7 @@
                                 <h1>Activity Feed</h1>
                                 <button class="ghost-btn" onclick="refreshActivity()">Refresh</button>
                             </div>
-                            <div id="activityFeed" class="activity-feed">
+                            <div id="activityFeed" class="activity-feed card">
                                 <div class="loading-state">
                                     <div class="spinner"></div>
                                     <p>Loading activity...</p>

@@ -8,7 +8,8 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background: #d9a86c;
+    /* 3D-style radial gradient background */
+    background: radial-gradient(circle at 20% 20%, #1e293b, #020617);
     color: #0f172a;
     min-height: 100vh;
     display: flex;
@@ -867,4 +868,23 @@ body {
 .activity-time {
     font-size: 0.8rem;
     color: #6b7280;
+}
+
+/* 3D dashboard perspective + floating cards */
+.dashboard {
+    perspective: 1200px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow:
+        0 40px 80px rgba(0, 0, 0, 0.45),
+        0 10px 25px rgba(0, 0, 0, 0.25);
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px) rotateX(4deg) rotateY(-4deg);
 }
